@@ -27,5 +27,4 @@
 
 
 ## SNOWBOY 설치방법 ##
-
-    https://blog.naver.com/rose1216_/221318052590
+https://blog.naver.com/rose1216_/221318052590
