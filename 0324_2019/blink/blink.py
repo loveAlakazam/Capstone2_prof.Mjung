@@ -2,7 +2,7 @@
 import RPi.GPIO as GPIO
 import time
 import sys
-pin_num =2 # pins_info 사진 참고
+pin_num =2 # raspberry_pi_pins_info 사진 참고
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(pin_num, GPIO.OUT)
 while True:
