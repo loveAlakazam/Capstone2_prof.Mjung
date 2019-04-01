@@ -24,11 +24,10 @@ if len(sys.argv)==1:
     sys.exit(-1)
    
 model = sys.argv[1]
+
 '''
 실제로 실행했을 때 아래의 명령어가 어떤 형식으로 출력되는지 확인할 것.
 '''
-
-''' 
 cmdLists=[
         # ending code:0
         [u'끝내자',0],    
@@ -99,10 +98,12 @@ cmdLists=[
         [u'다 꺼',8],
         [u'꺼줘',8],
         [u'나 잘래',8],
-        [u'졸려',8], 
+        [u'졸려',8],
+        [u'잘래',8]
 ]
 
-'''
+
+
 def main():
     while True:
         try:
