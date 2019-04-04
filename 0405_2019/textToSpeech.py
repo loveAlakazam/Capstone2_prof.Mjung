@@ -21,7 +21,7 @@ Example usage:
 """
 
 from google.cloud import texttospeech
-def run_quickstart(text):
+def answert(text):
     # [START tts_quickstart]
     """Synthesizes speech from the input string of text or ssml.
 
@@ -59,4 +59,4 @@ def run_quickstart(text):
 
 
 if __name__ == '__main__':
-    run_quickstart()
+    answer()
