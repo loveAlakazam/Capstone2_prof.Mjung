@@ -4,9 +4,10 @@ import signal
 import led_test as leds
 import time
 import sys
-import textToSpeech
-import weatherforecast
+from textToSpeech import answer
+from weatherforecast import todayInfo  
 import speech_listening
+import os
 
 
 interrupted=False
@@ -27,14 +28,13 @@ if len(sys.argv)==1:
    
 model = sys.argv[1]
 #simple mode(end/ saying hello / question weather)
-cmdLists=[
-    [u'끝',0], #ending
-    [u'안녕',1], #saying hello
-    [u'오늘 날씨',2], #question weather-today
-    [u'미세 먼지',3], #question dust-today
-    [u'미세먼지',3],
-    [u'내일 날씨',4] #question weather-tomorrow
-]
+cmdLists=[ 
+            ['끝', '끝내자', '종료'],
+            ['안녕', '안녕하세요', '하이'],
+            ['날씨', '오늘 날씨'],
+            ['미세먼지', '먼지', '미세먼지 알려줘'],
+            ['내일 날씨', '내일 날씨 알려줘']
+         ]
 
 ''' 
 cmdLists=[
@@ -53,7 +53,6 @@ cmdLists=[
         [u'',6],    # fan off code:6
         [u'',6]     #
 ]
-
 '''
 def main():
     while True:
@@ -71,22 +70,54 @@ def main():
             #2. listening user's command
             leds.pixels.think()
             your_command=speech_listening.main()
-            print(your_command)
-
-            #3. check cmd Lists
-
-            #4. answering command
+            #print(your_command)
             
-            #5. ending command
+            #날씨 정보 찾는다.
+            # today_weather_info : 오늘 날씨 정보
+            # tomorrow_weather_info : 내일 날씨 정보
+            # today_dust_info : 오늘 미세먼지 정보
+            today_weahter_info, tomorrow_weather_info, today_dust_info = todayInfo()
             
-            # if speech transcribe user's commands..
-            #print('hello')
-            #leds.pixels.listen()
-            #time.sleep(0.5)
-            #print('\n\n\ndetected\n\n\n')
-            #leds.pixels.speak()
-            #time.sleep(3)
-            #print('leds off')
+            #3. check cmdLists
+            #초기화. your_command가 cmdLists에 존재하지 않음을 의미함.
+            check=-1 
+            #your_command가 cmdLists에 있는지 확인한다.
+            for cmd in cmdLists:
+                if your_command in cmd: #cmd에 명령이 존재한다면
+                    check=cmdLists.index(cmd) #cmd의 index추출
+                    break #빠져나온다
+             
+            #명령어가 cmdList에 존재하지 않음.
+            if check==-1:
+                # led상태 : speak
+                leds.pixels.speak()
+                time.sleep(0.1)
+                answer('죄송합니다. 다시 명령해주세요.')
+                
+            
+            else: #명령어가 존재한다.
+                if check==0: #명령어: 종료 -> 반응: led off & 띵소리만 낸다.
+                    # led 상태: 불끈다.
+                    leds.pixels.off()
+                    time.sleep(0.1)
+                    os.system('aplay terminated.wav')
+
+                elif check==1: #명령어: 인사 -> 반응: 인사
+                    leds.pixels.speak()
+                    answer('안녕하세요?')
+                
+                elif check==2: #명령어: 오늘날씨
+                    leds.pixels.speak()
+                    answer(today_weahter_info)
+                
+                elif check==3: #명령어: 오늘 미세먼지
+                    leds.pixels.speak()
+                    answer(today_dust_info)
+                
+                elif check==4: #명령어: 내일 날씨
+                    leds.pixels.speak()
+                    answer(tomorrow_weather_info)
+                    
             leds.pixels.off()
             time.sleep(0.1)
         except KeyboardInterrupt: #detected signals
