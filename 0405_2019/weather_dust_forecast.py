@@ -58,5 +58,4 @@ if __name__=='__main__':
     today_temp, tomorrow_temp ,today_dust= todayInfo()
     print('[날씨]\n\t{}\n[미세먼지&오존]\n\t{}'.format(today_temp, today_dust))
     print(tomorrow_temp)
-    #tomorrow= tomorrowInfo()
    
