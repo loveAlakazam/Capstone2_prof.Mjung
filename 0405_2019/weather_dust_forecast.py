@@ -24,9 +24,10 @@ def todayInfo():
     location=soup.find('span', class_='btn_select').find('em').text
     today_weather_info='오늘 '+ location[:-1]+'의 기온은 '
     
-    #기온:
+    #기온: 
     temperature=soup.find_all('span', class_='todaytemp')
-    temperature=[x.text for x in temperature]
+    temperature=[x.text for x in temperature] #text만을 추출
+    #temperatrue=[오늘온도, 내일오전온도, 내일오후온도, 모레오전온도, 모레오후온도]
     
     #오늘 기온 temperature[0]
     today_weather_info+=(temperature[0]+'도이고 ')
