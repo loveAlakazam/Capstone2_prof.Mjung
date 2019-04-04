@@ -28,9 +28,12 @@ if len(sys.argv)==1:
 model = sys.argv[1]
 #simple mode(end/ saying hello / question weather)
 cmdLists=[
-    [u'',0], #ending
-    [u'',1], #saying hello
-    [u'',2] #question weather
+    [u'끝',0], #ending
+    [u'안녕',1], #saying hello
+    [u'오늘 날씨',2], #question weather-today
+    [u'미세 먼지',3], #question dust-today
+    [u'미세먼지',3],
+    [u'내일 날씨',4] #question weather-tomorrow
 ]
 
 ''' 
