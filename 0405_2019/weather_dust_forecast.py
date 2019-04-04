@@ -3,7 +3,7 @@
 Created on Thu Apr  4 18:34:35 2019
 @author: lovesAlakazam
 """
-import bs4
+from bs4 import BeautifulSoup
 from urllib.request import urlopen, Request
 
 def todayInfo():
@@ -16,7 +16,7 @@ def todayInfo():
     # page를 읽는다.
     html = page.read()
 
-    soup = bs4.BeautifulSoup(html, 'html5lib')
+    soup = BeautifulSoup(html, 'html5lib')
     #print(soup) 
     
     ## 오늘 날씨 정보를 알려줌.
