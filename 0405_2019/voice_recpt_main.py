@@ -36,24 +36,6 @@ cmdLists=[
             ['내일 날씨', '내일 날씨 알려줘']
          ]
 
-''' 
-cmdLists=[
-        [u'',0],    # ending code:0
-        [u'',0],    #
-        [u'',1],    # say hello code:1
-        [u'',1],    #
-        [u'',2],    # weather info code:2
-        [u'',2],    # weather info code:2
-        [u'',3],    # lamp on code :3
-        [u'',3],    #
-        [u'',4],    # lamp off code:4
-        [u'',4],    #
-        [u'',5],    # fan on code:5
-        [u'',5],    #
-        [u'',6],    # fan off code:6
-        [u'',6]     #
-]
-'''
 def main():
     while True:
         try:
@@ -99,7 +81,6 @@ def main():
                 if check==0: #명령어: 종료 -> 반응: led off & 띵소리만 낸다.
                     # led 상태: 불끈다.
                     leds.pixels.off()
-                    time.sleep(0.1)
                     os.system('aplay terminated.wav')
 
                 elif check==1: #명령어: 인사 -> 반응: 인사
