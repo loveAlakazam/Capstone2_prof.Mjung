@@ -46,8 +46,6 @@ def main():
                            interrupt_check=interrupt_callback,
                            sleep_time=0.03)
 
-            # if keyword detected keyword => using Speeh API
-            # google Speech transcribe mic...
             # maximum listening time: about 65[s]
             #2. listening user's command
             leds.pixels.think()
