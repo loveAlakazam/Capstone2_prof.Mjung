@@ -8,7 +8,22 @@ from textToSpeech import answer
 from weatherforecast import todayInfo  
 import speech_listening
 import os
+import RPi.GPIO as GPIO
 
+FAN_CHANNEL=12
+LIGHT_CHANNEL=13
+
+#GPIO.setmode(GPIO.BCM)
+#GPIO.setup(LIGHT_CHANNEL, GPIO.OUT)
+                
+#GPIO.setmode(GPIO.BCM)
+#GPIO.setup(FAN_CHANNEL, GPIO.OUT)
+
+def turn_on(channel):
+    GPIO.output(channel, GPIO.HIGH)
+
+def turn_off(channel):
+    GPIO.output(channel, GPIO.LOW)
 
 interrupted=False
 
@@ -29,31 +44,19 @@ if len(sys.argv)==1:
 model = sys.argv[1]
 #simple mode(end/ saying hello / question weather)
 cmdLists=[ 
-            ['끝', '끝내자', '종료'],
-            ['안녕', '안녕하세요', '하이'],
-            ['날씨', '오늘 날씨'],
-            ['미세먼지', '먼지', '미세먼지 알려줘'],
-            ['내일 날씨', '내일 날씨 알려줘']
+            ['끝', '끝내자', '종료'],#0
+            ['안녕', '안녕하세요', '하이'],#1
+            ['날씨', '오늘 날씨', '오늘날씨 알려줘', '오늘 날씨 알려 줘'],#2
+            ['미세먼지', '먼지', '미세먼지 알려 줘'],#3
+            ['내일 날씨', '내일 날씨 알려줘'],#4
+            ['불켜줘', '불 켜줘', '스탠드 켜줘', '스탠드', '불','조명', '조명 켜줘', '불 켜주세요', '불켜주세요' ], #only light on
+            ['불 꺼줘' '불꺼줘', '스탠드 꺼줘', '조명 꺼줘', '불 꺼주세요', '불꺼주세요','불꺼줄래','불끌래','불끌게'], # only light off
+            ['선풍기 켜줘', '더워', '덥다', '개더워', '너무 더워' ,'선풍기', '바람', '선풍기 바람', '선풍기바람', '선풍기 켜', '선풍기켜줘', '선풍기켜'], # only fan on
+            ['선풍기 꺼줘','추워','춥다','개추워','너무 추워', '선풍기 꺼주세요', '선풍기 끌래', '선풍기 그만'], # only fan off
+            ['기상 모드', '다 켜 줘','켜 줘', '켜 줘','둘다 켜줘','모두 켜줘','모두다 켜줘', '기상'], # fan and light on
+            ['취침 모드', '다 꺼 줘','꺼 줘','둘다 꺼줘','모두 꺼줘','모두다 꺼줘', '취침']  # fan and light off
          ]
 
-''' 
-cmdLists=[
-        [u'',0],    # ending code:0
-        [u'',0],    #
-        [u'',1],    # say hello code:1
-        [u'',1],    #
-        [u'',2],    # weather info code:2
-        [u'',2],    # weather info code:2
-        [u'',3],    # lamp on code :3
-        [u'',3],    #
-        [u'',4],    # lamp off code:4
-        [u'',4],    #
-        [u'',5],    # fan on code:5
-        [u'',5],    #
-        [u'',6],    # fan off code:6
-        [u'',6]     #
-]
-'''
 def main():
     while True:
         try:
@@ -98,7 +101,8 @@ def main():
             else: #명령어가 존재한다.
                 if check==0: #명령어: 종료 -> 반응: led off & 띵소리만 낸다.
                     # led 상태: 불끈다.
-                    os.system('aplay terminated.wav')
+                    sdecoder.play_audio_file()
+                    #os.system('aplay terminated.wav')
                     leds.pixels.off()             
 
                 elif check==1: #명령어: 인사 -> 반응: 인사
@@ -116,6 +120,52 @@ def main():
                 elif check==4: #명령어: 내일 날씨
                     leds.pixels.speak()
                     answer(tomorrow_weather_info)
+
+                elif check==5:  # 조명on
+                    GPIO.setmode(GPIO.BCM)
+                    GPIO.setup(LIGHT_CHANNEL, GPIO.OUT)
+                    turn_on(LIGHT_CHANNEL)
+                    time.sleep(1)
+                    
+                elif check==6:  # 조명off
+                    GPIO.setmode(GPIO.BCM)
+                    GPIO.setup(LIGHT_CHANNEL, GPIO.OUT)
+                    turn_off(LIGHT_CHANNEL)
+                    time.sleep(1)
+                    
+                elif check==7:  # 선풍기on
+                    GPIO.setmode(GPIO.BCM)
+                    GPIO.setup(FAN_CHANNEL, GPIO.OUT)
+                    turn_on(FAN_CHANNEL)
+                    time.sleep(1)
+                    
+                elif check==8:  # 선풍기off
+                    GPIO.setmode(GPIO.BCM)
+                    GPIO.setup(FAN_CHANNEL, GPIO.OUT)
+                    turn_off(FAN_CHANNEL)
+                    time.sleep(1)
+                    
+                elif check==9:  # 조명&선풍기on
+                    GPIO.setmode(GPIO.BCM)
+                    GPIO.setup(LIGHT_CHANNEL, GPIO.OUT)
+                    GPIO.setmode(GPIO.BCM)
+                    GPIO.setup(FAN_CHANNEL, GPIO.OUT)
+
+                    turn_on(LIGHT_CHANNEL)
+                    time.sleep(1)
+                    turn_on(FAN_CHANNEL)
+                    time.sleep(1)
+                    
+                else:#check==10 조명&선풍기off
+                    GPIO.setmode(GPIO.BCM)
+                    GPIO.setup(LIGHT_CHANNEL, GPIO.OUT)
+                    GPIO.setmode(GPIO.BCM)
+                    GPIO.setup(FAN_CHANNEL, GPIO.OUT)
+                    
+                    turn_off(LIGHT_CHANNEL)
+                    time.sleep(1)
+                    turn_off(FAN_CHANNEL)
+                    time.sleep(1)
                     
             leds.pixels.off()
             time.sleep(0.1)
@@ -124,7 +174,6 @@ def main():
     leds.pixels.off()
     time.sleep(1)
     sys.exit(1)
-        
 
 if __name__=='__main__':
     main()
