@@ -93,6 +93,8 @@ def main():
             else: #명령어가 존재한다.
                 if check==0: #명령어: 종료 -> 반응: led off & 띵소리만 낸다.
                     # led 상태: 불끈다.
+                    turn_off(12)
+                    turn_off(13)
                     sdecoder.play_audio_file()
                     #os.system('aplay terminated.wav')
                     leds.pixels.off()             
